@@ -5,8 +5,8 @@
     <description></description>
     <link>/</link>
     <atom:link href="/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Thu, 09 Jul 2015 21:14:59 +0800</pubDate>
-    <lastBuildDate>Thu, 09 Jul 2015 21:14:59 +0800</lastBuildDate>
+    <pubDate>Thu, 09 Jul 2015 21:19:37 +0800</pubDate>
+    <lastBuildDate>Thu, 09 Jul 2015 21:19:37 +0800</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
     
       <item>
@@ -42,15 +42,13 @@ Prof Simon Peyton Jones&lt;/p&gt;
 &lt;p&gt;This is going to be such a fun adventure.&lt;/p&gt;
 </description>
         <pubDate>Thu, 21 Mar 2013 00:00:00 +0800</pubDate>
-        <link>/career/2013/03/21/hello-dropbox.html</link>
-        <guid isPermaLink="true">/career/2013/03/21/hello-dropbox.html</guid>
+        <link>/2013/03/21/hello-dropbox.html</link>
+        <guid isPermaLink="true">/2013/03/21/hello-dropbox.html</guid>
         
         <category>facebook,</category>
         
         <category>dropbox</category>
         
-        
-        <category>career</category>
         
       </item>
     
@@ -131,13 +129,11 @@ Prof Simon Peyton Jones&lt;/p&gt;
 &lt;p&gt;Now, remember the 1950s called and still haven’t got their programming toolbox back.&lt;/p&gt;
 </description>
         <pubDate>Tue, 01 Jan 2013 00:00:00 +0800</pubDate>
-        <link>/languages/2013/01/01/1950s-called-wanted-toolbox-back.html</link>
-        <guid isPermaLink="true">/languages/2013/01/01/1950s-called-wanted-toolbox-back.html</guid>
+        <link>/2013/01/01/1950s-called-wanted-toolbox-back.html</link>
+        <guid isPermaLink="true">/2013/01/01/1950s-called-wanted-toolbox-back.html</guid>
         
         <category>programming</category>
         
-        
-        <category>languages</category>
         
       </item>
     

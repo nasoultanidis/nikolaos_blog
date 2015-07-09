@@ -3,7 +3,7 @@ title: "Hello, Dropbox"
 description: "I'm very excited to let you know that I'm joining Dropbox. After two years at Facebook I couldn't be more proud. Proud to have been part of something as important as Facebook and proud of the work I've done with shaping the future of mobile communication. It's truly been a fantastic time of my life. At Dropbox I'm going to work hard to make all our lives better. Remove friction from technical details in our modern daily lives, and relieve us from worrying about our 'stuff' — from quick snapshots and hasty notes to precious memories."
 layout: post
 tags: facebook, dropbox
-category: career
+
 
 ---
 
