@@ -29,7 +29,523 @@
       
     
     
-    <meta property="og:image" content="http://rsms.me/res/gotalk-intro.png">
+    
+    <meta property="og:url" content="http://rsms.me/2015/01/21/gotalk.html">
+    <meta property="og:site_name" content="rsms.me">
+    <meta property="og:type" content="article">
+    <meta property="og:locale" content="en_GB" />
+    
+    <meta property="article:published_time" content="2015-01-21">
+    
+    
+    <script>
+  //html { zoom:50%; }
+  if (window.addEventListener) {
+    var sidebarAdjustTimer;
+    function updateOrientation(orientationChangeEvent) {
+      if (sidebarAdjustTimer) clearInterval(sidebarAdjustTimer);
+      //console.log('window.orientation -> '+window.orientation);
+      if (window.orientation === -90 || window.orientation === 90) {
+        // landscape
+        var sidebar = document.getElementById('sidebar');
+        if (!sidebar.src || sidebar.src === '') {
+          sidebar.src = '/archive/sidebar.html';
+        }
+        sidebarAdjustTimer = setInterval(function() {
+          var height = Math.round(document.height * 1.6);
+          if (sidebar.height != height) {
+            sidebar.height = height;
+            sidebar.style.height = height + 'px';
+          }
+        },500);
+      } else {
+        // portrait
+      }
+    }
+    window.addEventListener('orientationchange', updateOrientation);
+    document.addEventListener('DOMSubtreeModified', function(ev) {
+      if (document.getElementById('sidebar')) {
+        document.removeEventListener('DOMSubtreeModified', arguments.callee);
+        updateOrientation();
+      }
+    });
+  }
+</script>
+    
+  </head>
+  <body>
+    <!--script>/*
+      var s;
+      if (document.location.hostname === 'rsms.me') {
+        s = document.createElement('script');
+        s.async = true;
+        s.src = "http://connect.facebook.net/en_US/all.js#appId=38027689216&xfbml=1";
+        document.getElementsByTagName('head')[0].appendChild(s);
+      }
+
+      if (window.navigator.userAgent.indexOf('iPad') != -1) {
+        document.documentElement.className = 'ios ipad';
+        window.rsmsHostIsIOS = 'ipad';
+      } else if (window.navigator.userAgent.indexOf('iPhone') != -1) {
+        document.documentElement.className = 'ios iphone';
+        window.rsmsHostIsIOS = 'iphone';
+      }
+    */</script>
+    <div id="fb-root"></div><script></script-->
+    <iframe id="sidebar"></iframe>
+    <header>
+      <h1 class="logo" onclick="document.location.href='/';"><a href="/"><img src="/res/signature-2-2.png" width="160" height="50" alt="Signature"></a></h1>
+      <ul class="navigation">
+        <li><a href="/projects/" title="Projects I am or was involved in">Projects</a></li>
+        <li><a href="/archive/" title="Archived articles">Archive</a></li>
+        <li><a href="/about/">About me</a></li>
+      </ul>
+    </header>
+    <!--div class="wrapper content"-->
+      <div class="content">
+  <div class="post single">
+    
+    <h1>Gotalk</h1>
+    <info datetime="2015-01-21">
+      Jan 21, 2015
+    </info>
+    
+    <div class="body"><p><a href="https://github.com/rsms/gotalk">Gotalk</a> exists to make it easy for programs to <em>talk with one another over the internet</em>, like a web app coordinating with a web server, or a bunch of programs dividing work amongst eachother.</p>
+
+<p><img src="/res/gotalk-comic.png" alt="A terribly boring amateur comic strip" /></p>
+
+<p>Gotalk takes the natural approach of <em>bidirectional</em> and <em>concurrent</em> communication — any peer have the ability to expose “operations” as well as asking other peers to perform operations. The traditional restrictions of who can request and who can respond usually associated with a client-server model is nowhere to be found in gotalk.</p>
+
+<h2 id="gotalk-in-a-nutshell">Gotalk in a nutshell</h2>
+
+<h4 id="bidirectional">Bidirectional</h4>
+
+<p>There’s no discrimination on capabilities depending on who connected or who accepted. Both “servers” and “clients” can expose operations as well as send requests to the other side.</p>
+
+<h4 id="concurrent">Concurrent</h4>
+
+<p>Requests, results, and notifications all share a single connection without blocking eachother by means of <a href="http://en.wikipedia.org/wiki/Protocol_pipelining"><em>pipelining</em></a>. There’s no serialization on request-result or even for a single large message, as the gotalk protocol is frame-based and multiplexes messages over a single connection. This means you can perform several requests at once without having to think about queueing or blocking.</p>
+
+<p><img src="/res/gotalk-pipeline-diagram.png" alt="Diagram of how Gotalk uses connection pipelining" /></p>
+
+<h4 id="simple">Simple</h4>
+
+<p>Gotalk has a simple and opinionated API with very few components. You expose an operation via “handle” and send requests via “request”.</p>
+
+<p><code>go
+Handle("greet", func(params In) (Out, error) { ... })
+// ...
+Request("greet", params, &amp;result)
+</code></p>
+
+<h4 id="practical">Practical</h4>
+
+<p>Gotalk includes a <a href="https://github.com/rsms/gotalk/tree/master/js">JavaScript implementation</a> for Web Sockets alongside the full-featured Go implementation, making it easy to build modern web applications. The Gotalk source code also includes <a href="https://github.com/rsms/gotalk/tree/master/examples">a number of easily-readable examples</a>.</p>
+
+<p><code>js
+handle("greet", function (params, result) { ... });
+// ...
+request("greet", params, function (err, result) { ... });
+</code></p>
+
+<h4 id="debuggable">Debuggable</h4>
+
+<p>The Gotalk protocol’s wire format is byte based for easy on-the-wire inspection of data. It can thus be operated over any reliable byte transport. For example, here’s a protocol message representing a request for an operation “hello” with the parameter “world”:</p>
+
+<pre><code>r001005hello00000005world
+</code></pre>
+
+<h2 id="by-example">By example</h2>
+
+<p>As just mentioned earlier, there are a few examples in the <code>examples</code> directory demonstrating how you can use Gotalk. But let’s explore a simple program right here — a little something written in <a href="http://golang.org/">Go</a> which demonstrates the use of an operation named “greet”:</p>
+
+<p>```go
+func server() {
+  gotalk.Handle(“greet”, func(in GreetIn) (GreetOut, error) {
+    return GreetOut{“Hello “ + in.Name}, nil
+  })
+  if err := gotalk.Serve(“tcp”, “localhost:1234”); err != nil {
+    log.Fatalln(err)
+  }
+}</p>
+
+<p>func client() {
+  s, err := gotalk.Connect(“tcp”, “localhost:1234”)
+  if err != nil {
+    log.Fatalln(err)
+  }
+  greeting := &amp;GreetOut{}
+  if err := s.Request(“greet”, GreetIn{“Rasmus”}, greeting); err != nil {
+    log.Fatalln(err)
+  }
+  log.Printf(“greeting: %+v\n”, greeting)
+  s.Close()
+}
+```</p>
+
+<p>Let’s look at the above example in more detail, broken apart to see what’s going on.</p>
+
+<p>We begin by importing the gotalk library together with <code>log</code> which we use for printing to the console:</p>
+
+<p><code>go
+package main
+import (
+  "log"
+  "github.com/rsms/gotalk"
+)
+</code></p>
+
+<p>We define two types: Expected input (request parameters) and output (result) for our “greet” operation:</p>
+
+<p><code>go
+type GreetIn struct {
+  Name string `json:"name"`
+}
+type GreetOut struct {
+  Greeting string `json:"greeting"`
+}
+</code></p>
+
+<p>Registers a process-global request handler for an operation called “greet” accepting parameters of type <code>GreetIn</code>, returning results of type <code>GreetOut</code>:</p>
+
+<p><code>go
+func server() {
+  gotalk.Handle("greet", func(in GreetIn) (GreetOut, error) {
+    return GreetOut{"Hello " + in.Name}, nil
+  })
+</code></p>
+
+<p>Finally at the bottom of our <code>server</code> function we call <code>gotalk.Serve</code>, which starts a local TCP server on port 1234:</p>
+
+<p><code>go
+  if err := gotalk.Serve("tcp", "localhost:1234"); err != nil {
+    log.Fatalln(err)
+  }
+}
+</code></p>
+
+<p>In out <code>client</code> function we start by connecting to the server:</p>
+
+<p><code>go
+func client() {
+  s, err := gotalk.Connect("tcp", "localhost:1234")
+  if err != nil {
+    log.Fatalln(err)
+  }
+</code></p>
+
+<p>Finally we send a request for “greet” and print the result:</p>
+
+<p>```go
+  greeting := GreetOut{}
+  if err := s.Request(“greet”, GreetIn{“Rasmus”}, &amp;greeting); err != nil {
+    log.Fatalln(err)
+  }
+  log.Printf(“greeting: %+v\n”, greeting)</p>
+
+<p>s.Close()
+}
+```</p>
+
+<p>Output:</p>
+
+<p><code>go
+greeting: {Greeting:Hello Rasmus}
+</code></p>
+
+<h2 id="gotalk-in-the-web-browser">Gotalk in the web browser</h2>
+
+<p>Gotalk is implemented not only in the full-fledged Go package, but also in a <a href="https://github.com/rsms/gotalk/tree/master/js">JavaScript library</a>. This allows writing web apps talking Gotalk via Web Sockets possible.</p>
+
+<p><code>go
+// server.go:
+package main
+import (
+  "net/http"
+  "github.com/rsms/gotalk"
+)
+func main() {
+  gotalk.HandleBufferRequest("echo", func(in []byte) ([]byte, error) {
+    return in, nil
+  })
+  http.Handle("/gotalk", gotalk.WebSocketHandler(nil, nil))
+  http.Handle("/", http.FileServer(http.Dir(".")))
+  err := http.ListenAndServe(":1234", nil)
+  if err != nil {
+    panic("ListenAndServe: " + err.Error())
+  }
+}
+</code></p>
+
+<p>In our html document, we begin by registering any operations we can handle:</p>
+
+<pre><code>&lt;!-- index.html --&gt;
+&lt;body&gt;
+&lt;script type="text/javascript" src="gotalk.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+gotalk.handle('greet', function (params, result) {
+  result({ greeting: 'Hello ' + params.name });
+});
+&lt;/script&gt;
+</code></pre>
+
+<p>We can’t “listen &amp; accept” connections in a web browser, but we can “connect” so we do just that, connecting to “/gotalk” which is where we registered <code>gotalk.WebSocketHandler</code> in our server.</p>
+
+<pre><code>&lt;!-- index.html --&gt;
+&lt;body&gt;
+&lt;script type="text/javascript" src="gotalk.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+gotalk.handle('greet', function (params, result) {
+  result({ greeting: 'Hello ' + params.name });
+});
+
+gotalk.connect('ws://'+document.location.host+'/gotalk', function (err, s) {
+  if (err) return console.error(err);
+  // s is a gotalk.Sock
+});
+&lt;/script&gt;
+</code></pre>
+
+<p>This is enough for enabling the <em>server</em> to do things in the <em>browser</em> …</p>
+
+<p>But you probably want to have the <em>browser</em> send requests to the <em>server</em>, so let’s send a “echo” request just as our connection opens:</p>
+
+<p><code>js
+gotalk.connect('ws://'+document.location.host+'/gotalk', function (err, s) {
+  if (err) return console.error(err);
+  s.request("echo", "Hello world", function (err, result) {
+    if (err) return console.error('echo failed:', err);
+    console.log('echo result:', result);
+  });
+});
+</code></p>
+
+<p>We could rewrite our code like this to allow some UI component to send a request:</p>
+
+<p>```js
+var s = gotalk.connect(‘ws://’+document.location.host+’/gotalk’, function (err, s) {
+  if (err) return console.error(err);
+});</p>
+
+<p>button.addEventListener(‘click’, function () {
+  s.request(“echo”, “Hello world”, function (err, result) {
+    if (err) return console.error(‘echo failed:’, err);
+    console.log(‘echo result:’, result);
+  });
+});
+```</p>
+
+<p>The request will fail with an error “socket is closed” if the user clicks our button while the connection isn’t open.</p>
+
+<p>If you’re interested in learning more about using Gotalk with web browsers, check out <a href="https://github.com/rsms/gotalk/tree/master/examples/websocket">examples/websocket</a> and <a href="https://github.com/rsms/gotalk/tree/master/examples/websocket-chat">examples/websocket-chat</a> which shows how to use most of the Gotalk functionality to make interactive websites.</p>
+
+<h2 id="protocol-and-wire-format">Protocol and wire format</h2>
+
+<p>The wire format is designed to be human-readable and flexible; it’s byte-based and can be efficiently implemented in a number of environments ranging from HTTP and WebSocket in a web browser to raw TCP in Go or C. The protocol provides only a small set of operations on which more elaborate operations can be modeled by the user.</p>
+
+<p>Here’s a complete description of the protocol:</p>
+
+<p>```rb
+conversation    = ProtocolVersion Message*
+message         = SingleRequest | StreamRequest
+                | SingleResult | StreamResult
+                | ErrorResult</p>
+
+<p>ProtocolVersion = <hexdigit> <hexdigit></hexdigit></hexdigit></p>
+
+<p>SingleRequest   = “r” requestID operation payload
+StreamRequest   = “s” requestID operation payload StreamReqPart+
+StreamReqPart   = “p” requestID payload
+SingleResult    = “R” requestID payload
+StreamResult    = “S” requestID payload StreamResult*
+ErrorResult     = “E” requestID payload
+Notification    = “n” type payload</p>
+
+<p>requestID       = <byte> <byte> <byte></byte></byte></byte></p>
+
+<p>operation       = text3
+type            = text3</p>
+
+<p>text3           = text3Size text3Value
+text3Size       = hexUInt3
+text3Value      = «byte&gt;{text3Size} as utf8 text&gt;</p>
+
+<p>payload         = payloadSize payloadData?
+payloadSize     = hexUInt8
+payloadData     = <byte>{payloadSize}</byte></p>
+
+<p>hexUInt3        = <hexdigit> <hexdigit> <hexdigit>
+hexUInt8        = <hexdigit> <hexdigit> <hexdigit> <hexdigit>
+                  <hexdigit> <hexdigit> <hexdigit> <hexdigit>
+```</hexdigit></hexdigit></hexdigit></hexdigit></hexdigit></hexdigit></hexdigit></hexdigit></hexdigit></hexdigit></hexdigit></p>
+
+<p>A conversation begins with the protocol version:</p>
+
+<p><code>lua
+00  -- ProtocolVersion 0
+</code></p>
+
+<p>If the version of the protocol spoken by the other end is not supported by the reader, the connection is terminated and the conversation never starts. Otherwise, any messages are read and/or written.</p>
+
+<p>This is a “single-payload” request …</p>
+
+<p><code>py
++----------------- SingleRequest
+|  +---------------- requestID   "001"
+|  |  +------------- text3Size   4
+|  |  |   +--------- operation   "echo"
+|  |  |   |       +- payloadSize 25
+|  |  |   |       |
+r001004echo00000019{"message":"Hello World"}
+</code></p>
+
+<p>… and a corresponding “single-payload” result:</p>
+
+<p><code>py
++----------------- SingleResult
+|  +---------------- requestID   "001"
+|  |       +-------- payloadSize 25
+|  |       |
+R00100000019{"message":"Hello World"}
+</code></p>
+
+<p>Each request is identified by exactly three bytes—the <code>requestID</code>—which is requestor-specific and has no purpose beyond identity, meaning the value is never interpreted.</p>
+
+<p>These “single” requests &amp; results are the most common protocol messages, and as their names indicates, their payloads follow immediately after the header. For large payloads this can become an issue when dealing with many concurrent requests over a single connection, for which there’s a more complicated “streaming” request &amp; result type which we will explore later on.</p>
+
+<p>If an error occurs while handing a request, an “error” is send as the reply instead of a regular result:</p>
+
+<p><code>py
++----------------- ErrorResult
+|  +---------------- requestID   "001"
+|  |       +-------- payloadSize 38
+|  |       |
+E00100000026{"error":"Unknown operation \"echo\""}
+</code></p>
+
+<p>As with all messages, what the payload data represents is up to each application and not part of the Gotalk protocol although we use JSON in our examples here.</p>
+
+<p>When there’s no expectation on a response, Gotalk provides a “notification” message type:</p>
+
+<p><code>py
++---------------------- Notification
+|              +--------- type        "chat message"
+|              |       +- payloadSize 50
+|              |       |
+n00cchat message00000032{"message":"Hi","from":"nthn","chat_room":"gonuts"}
+</code></p>
+
+<p>Notifications are never replied to nor can they cause “error” results.</p>
+
+<p>For more complicated scenarios there are “streaming-payload” requests and results at our disposal. This allows transmitting of large amounts of data without the need for large buffers. For example this could be used to forward audio data to audio playback hardware, or to transmit a large file off of slow media like a tape drive or hard-disk drive.</p>
+
+<p>Because transmitting a streaming request or result does not occupy “the line” (single-payloads are transmitted serially), they can also be useful when there are many concurrent requests happening over a single connection.</p>
+
+<p>Here’s an example of a “streaming-payload” request …</p>
+
+<p>```py
++—————– StreamRequest
+|  +—————- requestID   “001”
+|  |      +——— operation   “echo”
+|  |      |       +- payloadSize 25
+|  |      |       |
+s001004echo0000000b{“message”:</p>
+
+<p>+—————– streamReqPart
+|  +—————- requestID   “001”
+|  |       +——– payloadSize 25
+|  |       |
+p0010000000e”Hello World”}</p>
+
+<p>+—————– streamReqPart
+|  +—————- requestID   “001”
+|  |       +——– payloadSize 0 (end of stream)
+|  |       |
+p00100000000
+```</p>
+
+<p>… followed by a “streaming-payload” result:</p>
+
+<p>```py
++—————– StreamResult (1st part)
+|  +—————- requestID   “001”
+|  |       +——– payloadSize 25
+|  |       |
+S0010000000b{“message”:</p>
+
+<p>+—————– StreamResult (2nd part)
+|  +—————- requestID   “001”
+|  |       +——– payloadSize 25
+|  |       |
+S0010000000e”Hello World”}</p>
+
+<p>+—————– StreamResult
+|  +—————- requestID   “001”
+|  |       +——– payloadSize 0 (end of stream)
+|  |       |
+S00100000000
+```</p>
+
+<p>Requests and results does not need to match on the “single” vs “streaming” detail — it’s perfectly fine to send a streaming request and read a single response, or send a single response just to receive a streaming result. <em>The payload type is orthogonal to the message type</em>, with the exception of an error response which is always a “single-payload” message, carrying any information about the error in its payload. Note however that the current version of the Go package does not provide a high-level API for mixed-kind request-response handling.</p>
+
+<h2 id="open-source-code">Open source code</h2>
+
+<p>Gotalk is a hobby project and free to use, modify and even sell within the bounds of <a href="https://github.com/rsms/gotalk#mit-license">the liberal MIT-license</a>. You’ll find the most recent version at <a href="https://github.com/rsms/gotalk">https://github.com/rsms/gotalk</a></p>
+</div>
+    <!-- <div class="breaker"></div> -->
+    <div class="breaker"></div>
+    <!-- <info class="after">
+<div class="fb-like" data-href="http://rsms.me/2015/01/21/gotalk.html" data-send="false" data-width="550" data-show-faces="false" data-font="arial"></div>
+    </info> -->
+
+  
+  </div>
+</div>
+
+<!-- During authoring, this automatically reloads the post as its changing -->
+<script type="text/javascript">
+(function() {
+var qs = document.location.search;
+var current_etag = qs.match(/etag=("?[a-zA-Z0-9_-]+)/);
+if (current_etag !== null) { current_etag = current_etag[1]; }
+var scrolly = qs.match(/scrolly=([0-9]+)/);
+if (scrolly) {
+  scrolly = parseInt(scrolly[1]);
+  window.scrollTo(window.scrollX, scrolly);
+  setTimeout(function () {
+    window.scrollTo(window.scrollX, scrolly);
+  }, 10);
+}
+
+function check() {
+  var r = new XMLHttpRequest();
+  var url = document.location.href + ((qs && qs !== '') ? '&' : '?') + 'r=' + Math.random();
+  r.open('GET', url, true);
+  r.onreadystatechange = function() {
+    if (r.readyState == 4){
+      var found_etag = r.getResponseHeader('Etag').replace(/^"|"$/g);
+      //console.log('current_etag:', current_etag, 'found_etag:', found_etag);
+      if (current_etag === null) {
+        current_etag = found_etag;
+      } else if (found_etag !== current_etag) {
+        document.location.search =
+          '?etag=' + encodeURIComponent(found_etag) +
+          '&scrolly=' + window.scrollY;
+        return;
+      }
+      setTimeout(check, 500);
+    }
+  };
+  r.send(null);
+}
+check();
+})();
+</script>
+
+
+    <!--/div-->
+
+
     
 
     
