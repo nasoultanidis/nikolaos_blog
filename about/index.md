@@ -4,7 +4,7 @@ title: About
 ---
 
 # Nikolaos Andreas Soultanidis
-<img src="/res/niko-pic.png" width="240" height="240" align="right" alt="Picture of Nikolaos Andreas Soultanidis" style="margin-left:20px" />
+<img src="/res/nikopic.png" width="240" height="240" align="right" alt="Picture of Nikolaos Andreas Soultanidis" style="margin-left:20px" />
 
 ## Introduction
 
