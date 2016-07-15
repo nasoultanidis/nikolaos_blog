@@ -8,7 +8,8 @@ title: About
 
 ## Introduction
 
-I am a PhD student at the HKU in Hong Kong. I specialize in Real Estate Economics and Finance. My academic background in both Germany, at the European Business School, Schloss Reichartshausen, in Hong Kong at the HKU lie in Real Estate Finance topics.
+I am a PhD student at the HKU in Hong Kong. I specialize in Real Estate Economics and Finance. My academic background in both Germany (European Business School, Schloss Reichartshausen) and Hong Kong (The University of Hong Kong) lie in Real Estate Finance and Economics topics.
+
 
 
 ## Contact
