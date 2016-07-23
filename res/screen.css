@@ -122,6 +122,7 @@ header {
     color: #474343;
     text-decoration: none;
     font-size: 11px;
+    font-weight: bold;
   }
   header ul.navigation li a:hover { color: black; text-decoration: none; }
   header ul.navigation li a.active { font-weight:bold; color:black; }
