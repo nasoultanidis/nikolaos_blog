@@ -15,4 +15,4 @@ __Hedonic similarity induced spatial autocorrelation__, June 2016, 15th Academic
 
 - [The lazy R user](http://nasoultanidis.github.io/the-lazy-r-user/) - A 7x1h hands-down lecture series on using R when working with real estate economics data (June 2016)
 
-- Data Analysis with R - A introduction to working with R for the department (December 2015)
+- Data Analysis with R - An introduction to working with R for the PhD students at the department of Real Estate & Construction (December 2015)
