@@ -19,6 +19,8 @@ Currently under supervision of [Kwong Wing Chau](http://rec.hku.hk/kwchau/) and 
 
 Get in touch by sending an e-mail to nasoultanidis@gmail.com.
 
+University of Hong Kong | Department of Real Estate and Construction
+Room 535C, Knowles Building
 
 
 
