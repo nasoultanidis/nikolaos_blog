@@ -11,7 +11,7 @@ __Hedonic similarity induced spatial autocorrelation__, June 2016, 15th Academic
 
 ## Other
 
-- [Website hku-reco.org](www.hku-reco.org) - Exchange forum for the PhD student body of the department
+- [Website hku-reco.org](http://www.hku-reco.org) - Exchange forum for the PhD student body of the department
 
 - [The lazy R user](http://nasoultanidis.github.io/the-lazy-r-user/) - A 7x1h hands-down lecture series on using R when working with real estate economics data (June 2016)
 
