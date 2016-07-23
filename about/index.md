@@ -3,7 +3,6 @@ layout: page
 title: About
 ---
 
-# Nikolaos Andreas Soultanidis
 <img src="/res/nikopic.png" width="240" height="240" align="right" alt="Picture of Nikolaos Andreas Soultanidis" style="margin-left:20px" />
 
 ## Introduction
