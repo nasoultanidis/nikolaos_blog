@@ -2,7 +2,8 @@
 layout: page
 title: About
 ---
-<img src="/res/nikopic.png" width="200" height="200" align="right" alt="Picture of Nikolaos Andreas Soultanidis" style="margin-left:30px;, margin-top:20px" />
+
+<img src="/res/nikopic.png" width="40%" align="right">
 
 ### Introduction
 
