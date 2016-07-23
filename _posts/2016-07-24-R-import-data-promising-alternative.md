@@ -9,4 +9,4 @@ Importing data sets into R should be a straight forward step. But sometimes the 
 
 Nice to see that some developers are working on making the use of R even simpler - check out [GREA](https://github.com/Stan125/GREA).
 
-![first selection step of GREA](res/GREA - step1.png)
+![first selection step of GREA](http://nikolaos.soultanidis.com/res/GREA - step1.png)
