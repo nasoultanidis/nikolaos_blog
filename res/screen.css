@@ -119,7 +119,7 @@ header {
   }
   header ul.navigation li:first-child { margin-left: 0; }
   header ul.navigation li a {
-    color: #888;
+    color: #474343;
     text-decoration: none;
     font-size: 11px;
   }
