@@ -5,7 +5,7 @@ fb_comments: 3
 
 ## Research & Conferences
 
-__Separating causes of spatial autocorrelation: An empirical analysis of the price formation process__ (with Kwong Wing Chau, Siu Kei Wong), July 2016, [AREUEA Conference 2016, Alicante, Spain](http://web.ua.es/areuea/).
+__Separating causes of spatial autocorrelation: An empirical analysis of the price formation process__ (with Kwong Wing Chau, Siu Kei Wong), July 2016, [AREUEA Conference 2016, Alicante, Spain](http://web.ua.es/areuea/). [download](files/Paper - Separating causes of spatial autocorrelation - Soultanidis, NA - Chau, KW - Wong, SK.pdf)
 
 __Hedonic similarity induced spatial autocorrelation__, June 2016, 15th Academic Conference in Construction Management and Real Estate, The Hong Kong Polytechnic University (PolyU), Hong Kong.
 
