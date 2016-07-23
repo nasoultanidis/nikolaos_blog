@@ -5,8 +5,6 @@ title: About
 
 <img src="/res/nikopic.png" width="40%" align="right">
 
-### Introduction
-
 Hello, my name is Nikolaos Andreas Soultanidis. I am currently a PhD student at the HKU in Hong Kong. I specialize in Real Estate Economics and Finance. My academic background in both Germany ([European Business School, Schloss Reichartshausen](www.ebs.edu)) and Hong Kong ([The University of Hong Kong](http://www.arch.hku.hk/programmes_/rec/)) lie in Real Estate Finance and Economics topics.
 
 Currently under supervision of [Kwong Wing Chau](http://rec.hku.hk/kwchau/) and [Siu Kei Wong](http://rec.hku.hk/skkelvin/).
